@@ -27,7 +27,7 @@ def getNextOper(value):
 
   # Find the next operator (outside parentheses)
   for v in value:
-    no_of_parenth += countParenth(value)
+    no_of_parenth += countParenth(v)
     if no_of_parenth == 0 and v in OPERATORS:
       return v
 
@@ -55,7 +55,8 @@ def calcResult(input, mode):
         if mode == 2 and char == '*' and getNextOper(input[i+1:]) == '+':
           # Recursive call to force addition to go first
           value = str(calcResult(input[i+1:], mode))
-          return eval(str(result) + operator + value)
+          result = eval(str(result) + operator + value)
+          break
 
       else:
         value = value + char
@@ -72,7 +73,6 @@ def partOne(data):
   total = 0
   for d in data:
     total += calcResult(d, 1)
-
   print(total)
 
 
@@ -91,6 +91,9 @@ partTwo(readFile())
 
 # Test functions
 def test(data, mode):
+  print(str(10 if mode == 1 else 14), calcResult('2*3+4', mode))
+  print(str(16 if mode == 1 else 20), calcResult('(2*3+4)+(2*3)', mode))
+  print(str(26 if mode == 1 else 40), calcResult('2*(2*3+4)+(2*3)', mode))
   print(str(71 if mode == 1 else 231), calcResult('1+2*3+4*5+6', mode))
   print(str(51 if mode == 1 else 51), calcResult('1+(2*3)+(4*(5+6))', mode))
   print(str(26 if mode == 1 else 46), calcResult('2*3+(4*5)', mode))
